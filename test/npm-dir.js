@@ -5,11 +5,24 @@ var main = require('../');
 var npm = require('npm');
 
 describe("npm-dir", function(){
-    it(".dir", function(){
-        expect(main.dir).to.equal(npm.dir);
+    it(".dir", function(done){
+        npm.load({
+            global: true
+
+        }, function () {
+            expect(main.dir).to.equal(npm.dir);
+            done();
+        });
+        
     });
 
-    it(".prefix", function(){
-        expect(main.prefix).to.equal(npm.globalPrefix);
+    it(".prefix", function(done){
+        npm.load({
+            global: true
+
+        }, function () {
+            expect(main.prefix).to.equal(npm.globalPrefix);
+            done();
+        });
     });
 });
