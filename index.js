@@ -14,25 +14,26 @@ Object.defineProperties(exports, {
 
     prefix: {
         get: function () {
-            if ( prefix ) {
-                return prefix;
+            if ( !prefix ){
+                if (process.env.PREFIX) {
+                    prefix = process.env.PREFIX;
+
+                } else if (process.platform === 'win32') {
+                    // c:\node\node.exe --> prefix=c:\node\
+                    prefix = node_path.dirname(process.execPath);
+
+                } else {
+                    // /usr/local/bin/node --> prefix=/usr/local
+                    prefix = node_path.dirname(node_path.dirname(process.execPath));
+
+                    // destdir only is respected on Unix
+                    if (process.env.DESTDIR) {
+                        prefix = node_path.join(process.env.DESTDIR, prefix);
+                    }
+                }
             }
 
-            if (process.env.PREFIX) {
-                prefix = process.env.PREFIX;
-
-            } else if (process.platform === "win32") {
-                // c:\node\node.exe --> prefix=c:\node\
-                prefix = node_path.dirname(process.execPath);
-
-            } else {
-                // /usr/local/bin/node --> prefix=/usr/local
-                prefix = node_path.dirname(node_path.dirname(process.execPath));
-
-            // destdir only is respected on Unix
-            if (process.env.DESTDIR) {
-                prefix = node_path.join(process.env.DESTDIR, prefix);
-            }
+            return prefix;
         }
     }
 });
